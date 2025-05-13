@@ -84,4 +84,6 @@ Make your code changes, and the application should automatically reload (due to 
 ## Stopping the Application
 
 To stop the application, run:
-
+```
+docker-compose down
+```
