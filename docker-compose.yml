@@ -11,9 +11,10 @@ services:
       - ./backend:/app
     environment:
       - DATABASE_URL=sqlite:///./instagram.db  # Or your actual database URL
-    depends_on:
+    depends_on:  # Corrected format
       # Add any dependencies, e.g., database
       # - db
+      []
     networks:
       - app_network
 
