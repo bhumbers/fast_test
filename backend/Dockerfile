@@ -7,6 +7,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY backend/backend backend
 
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "pytest backend/backend/tests && uvicorn backend.main:app --host 0.0.0.0 --port 8000"]
 
 # CMD ["ls", "-lah"]

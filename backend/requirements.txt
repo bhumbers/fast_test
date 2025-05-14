@@ -3,3 +3,4 @@ uvicorn
 SQLAlchemy
 psycopg2-binary  # If you're using PostgreSQL
 python-multipart
+pytest
