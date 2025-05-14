@@ -8,4 +8,4 @@ RUN npm install -g serve
 
 COPY frontend .
 
-CMD ["npm", "run", "start"]
+CMD ["serve", "-s", "."]
