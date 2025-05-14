@@ -8,12 +8,10 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app
+      - backend_data:/app
     environment:
       - DATABASE_URL=sqlite:///./instagram.db  # Or your actual database URL
-    depends_on:  # Corrected format
-      # Add any dependencies, e.g., database
-      # - db
+    depends_on:
       []
     networks:
       - app_network
@@ -25,11 +23,15 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./frontend:/app
+      - frontend_data:/app
     depends_on:
       - backend
     networks:
       - app_network
+
+volumes:
+  backend_data:
+  frontend_data:
 
 networks:
   app_network:
