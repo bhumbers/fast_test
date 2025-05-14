@@ -8,6 +8,7 @@ services:
       target: test
     environment:
       - DATABASE_URL=sqlite:///./test.db  # Or your test database URL
+      - PYTHONPATH=/app  # Add /app to Python's module search path
     volumes:
       - ./backend:/app/backend
     networks:
