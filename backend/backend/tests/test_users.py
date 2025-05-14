@@ -2,9 +2,9 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from backend.main import app, get_db
-from backend.models import Base
-from backend.schemas import UserCreate, User
+from backend.backend.main import app, get_db
+from backend.backend.models import Base
+from backend.backend.schemas import UserCreate, User
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 
@@ -48,4 +48,3 @@ def test_create_and_read_user():
     assert read_user.id == created_user.id
     assert read_user.email == created_user.email
     assert read_user.is_active == created_user.is_active
-
