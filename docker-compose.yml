@@ -1,17 +1,35 @@
-version: "3.9"
+version: "3.8"
+
 services:
   backend:
-    build: ./backend
+    build:
+      context: ./
+      dockerfile: backend/Dockerfile
     ports:
       - "8000:8000"
     volumes:
       - ./backend:/app
     environment:
-      - DATABASE_URL=sqlite:///./instagram.db
+      - DATABASE_URL=sqlite:///./instagram.db  # Or your actual database URL
+    depends_on:
+      # Add any dependencies, e.g., database
+      # - db
+    networks:
+      - app_network
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./
+      dockerfile: frontend/Dockerfile
     ports:
-      - "8080:3000"
+      - "3000:3000"
     volumes:
       - ./frontend:/app
+    depends_on:
+      - backend
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
