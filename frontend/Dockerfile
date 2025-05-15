@@ -2,10 +2,10 @@ FROM node:16-alpine
 
 WORKDIR /app
 
-COPY frontend/package*.json ./
+COPY package*.json ./
 RUN npm install
 RUN npm install -g serve
 
-COPY frontend .
+COPY * .
 
 CMD ["serve", "-s", "."]

@@ -3,49 +3,35 @@ version: "3.8"
 services:
   backend_test:
     build:
-      context: ./
-      dockerfile: backend/Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile
       target: test
     environment:
       - DATABASE_URL=sqlite:///./test.db  # Or your test database URL
       - PYTHONPATH=/app  # Add /app to Python's module search path
-    volumes:
-      - ./backend:/app/backend
     networks:
       - app_network
 
   backend:
     build:
-      context: ./
-      dockerfile: backend/Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile
       target: service
     ports:
       - "8000:8000"
-    volumes:
-      - backend_data:/app
     environment:
       - DATABASE_URL=sqlite:///./instagram.db  # Or your actual database URL
-    depends_on:
-      - backend_test
-    networks:
-      - app_network
 
   frontend:
     build:
-      context: ./
-      dockerfile: frontend/Dockerfile
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    volumes:
-      - frontend_data:/app
     depends_on:
       - backend
     networks:
       - app_network
-
-volumes:
-  backend_data:
-  frontend_data:
 
 networks:
   app_network:
