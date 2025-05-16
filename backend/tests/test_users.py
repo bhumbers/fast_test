@@ -36,6 +36,7 @@ def test_create_and_read_user():
         "password": "password123",
         "is_active": True,
         "username": "testuser"
+        "username": "testuser"
     }
     response = client.post("/users/", json=user_data)
     assert response.status_code == 200, response.text
