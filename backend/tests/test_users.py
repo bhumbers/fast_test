@@ -35,7 +35,7 @@ def test_create_and_read_user():
         "email": "test@example.com",
         "password": "password123",
         "is_active": True,
-        "username": "testuser"
+        "username": "testuser",
         "username": "testuser"
     }
     response = client.post("/users/", json=user_data)
