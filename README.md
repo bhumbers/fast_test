@@ -39,7 +39,7 @@ Before you begin, ensure you have the following installed:
 4.  **Run the application using Docker Compose:**
 
     ```bash
-    docker-compose up --build
+    docker compose up --build
     ```
 
     This command will build the Docker images for the backend and frontend services and start them.  The first time you run this, it may take a few minutes to download the necessary images and build the application.
@@ -66,7 +66,7 @@ The backend is configured to connect to this database using the `DATABASE_URL` e
 To run the backend tests in Docker:
 
 ```bash
-docker-compose exec backend pytest
+docker compose exec backend pytest
 ```
 
 This runs the tests in the Docker container, ensuring the test environment matches the production environment.
@@ -79,5 +79,5 @@ Make your code changes, and the application should automatically reload (due to 
 
 To stop the application, run:
 ```
-docker-compose down
+docker compose down
 ```
