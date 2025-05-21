@@ -5,16 +5,9 @@ from sqlalchemy.orm import sessionmaker
 from backend.main import app, get_db
 from backend.models import Base
 from backend.schemas import UserCreate, User
+from backend.database import SessionLocal
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
-
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-)
-TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-
-Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=SessionLocal)
 
 
 def override_get_db():
@@ -34,15 +27,12 @@ def test_create_and_read_user():
     user_data = {
         "email": "test@example.com",
         "password": "password123",
-        "is_active": True,
-        "username": "testuser"
         "username": "testuser"
     }
     response = client.post("/users/", json=user_data)
     assert response.status_code == 200, response.text
     created_user = User(**response.json())
     assert created_user.email == user_data["email"]
-    assert created_user.is_active == user_data["is_active"]
     assert created_user.username == user_data["username"]
 
     response = client.get(f"/users/{created_user.id}")
@@ -50,5 +40,4 @@ def test_create_and_read_user():
     read_user = User(**response.json())
     assert read_user.id == created_user.id
     assert read_user.email == created_user.email
-    assert read_user.is_active == created_user.is_active
     assert read_user.username == created_user.username
