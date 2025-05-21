@@ -65,11 +65,27 @@ The backend is configured to connect to this database using the `DATABASE_URL` e
 
 To run the backend tests in Docker:
 
-```bash
-docker compose exec backend pytest
-```
+1. Make sure the Docker containers are running:
+
+   ```bash
+   docker compose up -d
+   ```
+
+2. Run the tests in the backend container:
+
+   ```bash
+   docker compose exec backend pytest
+   ```
 
 This runs the tests in the Docker container, ensuring the test environment matches the production environment.
+
+Alternatively, you can run tests directly using the test stage in the Dockerfile:
+
+```bash
+docker compose run --rm backend pytest
+```
+
+This will create a temporary container specifically for running tests.
 
 ## Development
 
