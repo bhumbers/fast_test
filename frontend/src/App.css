@@ -114,6 +114,45 @@ body {
   margin: 20px;
 }
 
+.feed-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.sample-posts-btn {
+  background-color: #0095f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 16px;
+}
+
+.sample-posts-btn:hover:not(:disabled) {
+  background-color: #1877f2;
+}
+
+.sample-posts-btn:disabled {
+  background-color: #dbdbdb;
+  color: #8e8e8e;
+  cursor: not-allowed;
+}
+
+.sample-posts-btn.secondary {
+  background-color: #ffffff;
+  color: #262626;
+  border: 1px solid #dbdbdb;
+  margin-top: 0;
+}
+
+.sample-posts-btn.secondary:hover:not(:disabled) {
+  background-color: #f8f9fa;
+}
+
 @media (max-width: 768px) {
   .feed {
     margin: 10px auto;
