@@ -1,11 +1,7 @@
-from fastapi.testclient import TestClient
-
-from backend.main import app
 from backend.schemas import User
 
-client = TestClient(app)
 
-def test_create_and_read_user():
+def test_create_and_read_user(client):
     user_data = {
         "email": "test@example.com",
         "password": "password123",
