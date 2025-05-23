@@ -63,6 +63,24 @@ body {
   display: block;
 }
 
+.post-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #efefef;
+  background-color: #fafafa;
+}
+
+.post-username {
+  font-weight: 600;
+  font-size: 14px;
+  color: #262626;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.post-username:hover {
+  color: #0095f6;
+}
+
 .post-content {
   padding: 16px;
 }

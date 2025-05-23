@@ -3,6 +3,7 @@ import './App.css';
 
 function App() {
   const [posts, setPosts] = useState([]);
+  const [filteredUserId, setFilteredUserId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [creating, setCreating] = useState(false);
@@ -11,9 +12,12 @@ function App() {
   const [postingComment, setPostingComment] = useState({});
   const [showAllComments, setShowAllComments] = useState({});
 
-  const fetchPosts = async () => {
+  const fetchPosts = async (userId = null) => {
     try {
-      const response = await fetch('http://localhost:8000/posts/');
+      const url = userId 
+        ? `http://localhost:8000/users/${userId}/posts`
+        : 'http://localhost:8000/posts/';
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error('Failed to fetch posts');
       }
@@ -38,6 +42,7 @@ function App() {
     }
   };
 
+<<<<<<< HEAD
   const fetchPostComments = async (postId) => {
     try {
       const response = await fetch(`http://localhost:8000/posts/${postId}/comments/`);
@@ -79,6 +84,20 @@ function App() {
     } finally {
       setPostingComment(prev => ({ ...prev, [postId]: false }));
     }
+=======
+  const handleUserClick = async (userId) => {
+    setLoading(true);
+    setFilteredUserId(userId);
+    await fetchPosts(userId);
+    setLoading(false);
+  };
+
+  const showAllPosts = async () => {
+    setLoading(true);
+    setFilteredUserId(null);
+    await fetchPosts();
+    setLoading(false);
+>>>>>>> 3b173b23 (Add clickable user links to posts with filtering functionality)
   };
 
   useEffect(() => {
@@ -196,7 +215,7 @@ function App() {
       }
 
       // Refresh posts list
-      await fetchPosts();
+      await fetchPosts(filteredUserId);
     } catch (err) {
       setError('Failed to create sample posts: ' + err.message);
     } finally {
@@ -246,6 +265,15 @@ function App() {
         ) : (
           <>
             <div className="feed-header">
+              {filteredUserId && (
+                <button 
+                  className="sample-posts-btn secondary" 
+                  onClick={showAllPosts}
+                  style={{ marginRight: '10px' }}
+                >
+                  Show All Posts
+                </button>
+              )}
               <button 
                 className="sample-posts-btn secondary" 
                 onClick={createSamplePosts}
@@ -254,6 +282,7 @@ function App() {
                 {creating ? 'Adding...' : 'Add More Sample Posts'}
               </button>
             </div>
+<<<<<<< HEAD
             {posts.map((post) => {
               const postComments = comments[post.id] || [];
               const displayComments = showAllComments[post.id] ? postComments : postComments.slice(0, 3);
@@ -333,6 +362,27 @@ function App() {
                         {new Date(post.created_at).toLocaleDateString()}
                       </span>
                     </div>
+=======
+            {posts.map((post) => (
+              <div key={post.id} className="post-card">
+                <div className="post-header">
+                  <span 
+                    className="post-username" 
+                    onClick={() => handleUserClick(post.owner.id)}
+                  >
+                    @{post.owner.username}
+                  </span>
+                </div>
+                <div className="post-image">
+                  <img src={post.image_url} alt="Post" />
+                </div>
+                <div className="post-content">
+                  <p className="post-caption">{post.caption}</p>
+                  <div className="post-meta">
+                    <span className="post-date">
+                      {new Date(post.created_at).toLocaleDateString()}
+                    </span>
+>>>>>>> 3b173b23 (Add clickable user links to posts with filtering functionality)
                   </div>
                 </div>
               );
