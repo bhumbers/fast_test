@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy.exc import SQLAlchemyError
 from typing import List
 
@@ -64,16 +64,17 @@ def create_post(post: schemas.PostCreate, owner_id: int, db: Session = Depends(g
 
 @app.get("/posts/", response_model=List[schemas.Post])
 def read_posts(db: Session = Depends(get_db)):
-    posts = db.query(models.Post).all()
+    posts = db.query(models.Post).options(joinedload(models.Post.owner)).all()
     return posts
 
 @app.get("/posts/{post_id}", response_model=schemas.Post)
 def read_post(post_id: int, db: Session = Depends(get_db)):
-    post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    post = db.query(models.Post).options(joinedload(models.Post.owner)).filter(models.Post.id == post_id).first()
     if not post:
         raise HTTPException(status_code=404, detail="Post not found")
     return post
 
+<<<<<<< HEAD
 @app.post("/comments/", response_model=schemas.Comment)
 def create_comment(comment: schemas.CommentCreate, post_id: int, user_id: int, db: Session = Depends(get_db)):
     try:
@@ -109,6 +110,17 @@ def read_post_comments(post_id: int, limit: int = None, db: Session = Depends(ge
     
     comments = query.all()
     return comments
+=======
+@app.get("/users/{user_id}/posts", response_model=List[schemas.Post])
+def read_user_posts(user_id: int, db: Session = Depends(get_db)):
+    # Check if user exists
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    posts = db.query(models.Post).options(joinedload(models.Post.owner)).filter(models.Post.owner_id == user_id).all()
+    return posts
+>>>>>>> 3b173b23 (Add clickable user links to posts with filtering functionality)
 
 @app.get("/")
 async def read_root():
