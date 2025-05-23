@@ -74,7 +74,16 @@ def read_post(post_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Post not found")
     return post
 
-<<<<<<< HEAD
+@app.get("/users/{user_id}/posts", response_model=List[schemas.Post])
+def read_user_posts(user_id: int, db: Session = Depends(get_db)):
+    # Check if user exists
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    posts = db.query(models.Post).options(joinedload(models.Post.owner)).filter(models.Post.owner_id == user_id).all()
+    return posts
+
 @app.post("/comments/", response_model=schemas.Comment)
 def create_comment(comment: schemas.CommentCreate, post_id: int, user_id: int, db: Session = Depends(get_db)):
     try:
@@ -110,17 +119,6 @@ def read_post_comments(post_id: int, limit: int = None, db: Session = Depends(ge
     
     comments = query.all()
     return comments
-=======
-@app.get("/users/{user_id}/posts", response_model=List[schemas.Post])
-def read_user_posts(user_id: int, db: Session = Depends(get_db)):
-    # Check if user exists
-    user = db.query(models.User).filter(models.User.id == user_id).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    
-    posts = db.query(models.Post).options(joinedload(models.Post.owner)).filter(models.Post.owner_id == user_id).all()
-    return posts
->>>>>>> 3b173b23 (Add clickable user links to posts with filtering functionality)
 
 @app.get("/")
 async def read_root():
