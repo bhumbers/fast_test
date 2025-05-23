@@ -74,6 +74,42 @@ def read_post(post_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Post not found")
     return post
 
+@app.post("/comments/", response_model=schemas.Comment)
+def create_comment(comment: schemas.CommentCreate, post_id: int, user_id: int, db: Session = Depends(get_db)):
+    try:
+        # Check if post exists
+        post = db.query(models.Post).filter(models.Post.id == post_id).first()
+        if not post:
+            raise HTTPException(status_code=404, detail="Post not found")
+        
+        # Check if user exists
+        user = db.query(models.User).filter(models.User.id == user_id).first()
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        db_comment = models.Comment(text=comment.text, post_id=post_id, user_id=user_id)
+        db.add(db_comment)
+        db.commit()
+        db.refresh(db_comment)
+    except SQLAlchemyError as e:
+        print(f"Database error: {e}")
+        raise HTTPException(status_code=500, detail="Database error occurred")
+    return db_comment
+
+@app.get("/posts/{post_id}/comments/", response_model=List[schemas.Comment])
+def read_post_comments(post_id: int, limit: int = None, db: Session = Depends(get_db)):
+    # Check if post exists
+    post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+    
+    query = db.query(models.Comment).filter(models.Comment.post_id == post_id).order_by(models.Comment.created_at.desc())
+    if limit:
+        query = query.limit(limit)
+    
+    comments = query.all()
+    return comments
+
 @app.get("/")
 async def read_root():
     return {"message": "Welcome to the Instagram Clone!"}
