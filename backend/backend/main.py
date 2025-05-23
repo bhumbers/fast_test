@@ -103,7 +103,7 @@ def read_post_comments(post_id: int, limit: int = None, db: Session = Depends(ge
     if not post:
         raise HTTPException(status_code=404, detail="Post not found")
     
-    query = db.query(models.Comment).filter(models.Comment.post_id == post_id).order_by(models.Comment.created_at.desc())
+    query = db.query(models.Comment).filter(models.Comment.post_id == post_id).order_by(models.Comment.created_at.desc(), models.Comment.id.desc())
     if limit:
         query = query.limit(limit)
     
