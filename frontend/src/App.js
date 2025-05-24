@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import { API_URL } from './config';
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -15,8 +16,8 @@ function App() {
   const fetchPosts = async (userId = null) => {
     try {
       const url = userId 
-        ? `http://localhost:8000/users/${userId}/posts`
-        : 'http://localhost:8000/posts/';
+        ? `${API_URL}/users/${userId}/posts`
+        : `${API_URL}/posts/`;
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error('Failed to fetch posts');
@@ -28,7 +29,7 @@ function App() {
       const commentsData = {};
       for (const post of postsData) {
         try {
-          const commentsResponse = await fetch(`http://localhost:8000/posts/${post.id}/comments/`);
+          const commentsResponse = await fetch(`${API_URL}/posts/${post.id}/comments/`);
           if (commentsResponse.ok) {
             commentsData[post.id] = await commentsResponse.json();
           }
@@ -44,7 +45,7 @@ function App() {
 
   const fetchPostComments = async (postId) => {
     try {
-      const response = await fetch(`http://localhost:8000/posts/${postId}/comments/`);
+      const response = await fetch(`${API_URL}/posts/${postId}/comments/`);
       if (response.ok) {
         const postComments = await response.json();
         setComments(prev => ({
@@ -62,7 +63,7 @@ function App() {
     
     setPostingComment(prev => ({ ...prev, [postId]: true }));
     try {
-      const response = await fetch(`http://localhost:8000/comments/?post_id=${postId}&user_id=1`, {
+      const response = await fetch(`${API_URL}/comments/?post_id=${postId}&user_id=1`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -116,7 +117,7 @@ function App() {
       // First create a user if one doesn't exist
       let userId = 1;
       try {
-        const userResponse = await fetch('http://localhost:8000/users/', {
+        const userResponse = await fetch(`${API_URL}/users/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -163,7 +164,7 @@ function App() {
       // Create posts and collect their IDs
       const createdPostIds = [];
       for (const post of samplePosts) {
-        const response = await fetch(`http://localhost:8000/posts/?owner_id=${userId}`, {
+        const response = await fetch(`${API_URL}/posts/?owner_id=${userId}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -198,7 +199,7 @@ function App() {
         
         for (let i = 0; i < numComments; i++) {
           try {
-            await fetch(`http://localhost:8000/comments/?post_id=${postId}&user_id=${userId}`, {
+            await fetch(`${API_URL}/comments/?post_id=${postId}&user_id=${userId}`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
